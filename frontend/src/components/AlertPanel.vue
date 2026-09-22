@@ -1,8 +1,8 @@
 <template>
   <div class="panel">
     <h4>🚨 告警列表</h4>
-    <div v-if="!alerts.length" class="empty">暂无告警</div>
-    <div v-for="a in alerts.slice(0,8)" :key="a.id" class="alert-row" :class="a.severity">
+    <div v-if="!hasAlerts" class="empty">暂无告警</div>
+    <div v-for="a in visibleAlerts" :key="a.id" class="alert-row" :class="a.severity">
       <span class="a-sev" :class="a.severity">{{ a.severity.toUpperCase() }}</span>
       <span class="a-msg">{{ a.message }}</span>
     </div>
@@ -10,10 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useLogStore } from '../store/log'
-const store = useLogStore()
-const alerts = computed(() => store.result?.alerts || [])
+import { useAnalysis } from '../composables/useAnalysis'
+const { hasAlerts, visibleAlerts } = useAnalysis()
 </script>
 
 <style scoped>
